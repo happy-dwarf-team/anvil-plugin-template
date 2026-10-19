@@ -15,18 +15,13 @@ include(FetchContent)
 #       URL_HASH SHA256=<hash of anvil-sdk-windows-x64.zip in the release's SHA256SUMS.txt>)
 #   FetchContent_MakeAvailable(anvil_sdk)
 #
-# and drop enable_language(C) below and the second anvil.exe path in
-# .github/workflows/build.yml.
-#
-# Anvil's tree enables C, and anvil_add_plugin then asks for C11 in this
-# directory too, which needs C enabled here as well.
-enable_language(C)
+# and drop the second anvil.exe path in .github/workflows/build.yml.
 set(ANVIL_BUILD_TESTS OFF)
 set(ANVIL_BUILD_EXAMPLES OFF)
 set(ANVIL_BUILD_BENCH OFF)
 FetchContent_Declare(anvil_sdk
     GIT_REPOSITORY https://github.com/happy-dwarf-team/anvil.git
-    GIT_TAG ab8f7e699b408e94f117f2b8d5f89e19773d0114  # main, 2026-10-19
+    GIT_TAG 51c8ac46350f2598c800c7f52bf85d21ec163b39  # main, 2026-10-20
     EXCLUDE_FROM_ALL)
 FetchContent_MakeAvailable(anvil_sdk)
 
