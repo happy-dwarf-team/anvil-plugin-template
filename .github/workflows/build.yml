@@ -1,0 +1,81 @@
+name: build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  # Called by release.yml to build the assets of a new release.
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  windows:
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Configure
+        run: cmake -S . -B build -G "Visual Studio 17 2022" -A x64 -DCMAKE_COMPILE_WARNING_AS_ERROR=ON
+
+      - name: Build
+        run: cmake --build build --config Release
+
+      # CI has no eu4.exe, so `anvil check` checks what it can without the game:
+      # the schemas of plugin.toml, symbols.toml and settings.toml, and that
+      # symbols.lock matches symbols.toml with result = "ok" (the lock check).
+      # Problems show up as annotations on the files.
+      - name: anvil check
+        shell: pwsh
+        run: |
+          # The first path is the SDK archive of an Anvil release, the second the
+          # SDK built from Anvil's sources (until Anvil 1.0, see CMakeLists.txt).
+          $anvil = 'build/_deps/anvil_sdk-src/bin/anvil.exe', 'build/_deps/anvil_sdk-build/Release/anvil.exe' |
+              Where-Object { Test-Path $_ } | Select-Object -First 1
+          if (-not $anvil) { Write-Output '::error::anvil.exe not found under build/_deps'; exit 1 }
+          & $anvil --version
+          & $anvil check . --format github
+          exit $LASTEXITCODE
+
+      # The release assets, built on every change so a release never packages
+      # something CI has not seen:
+      #   <id>-<version>.zip           the plugin folder, for <EU4>/anvil/plugins/
+      #   <id>-<version>-workshop.zip  a mod folder (descriptor.mod + anvil/<id>/)
+      #                                for Documents/Paradox Interactive/Europa Universalis IV/mod/
+      - name: Package
+        shell: pwsh
+        run: |
+          $manifest = Get-Content plugin.toml -Raw
+          $id = [regex]::Match($manifest, '(?m)^\s*id\s*=\s*"([^"]+)"').Groups[1].Value
+          $version = [regex]::Match($manifest, '(?m)^\s*version\s*=\s*"([^"]+)"').Groups[1].Value
+          if (-not $id -or -not $version) { Write-Output '::error file=plugin.toml::id or version not found'; exit 1 }
+          $plugin = "build/plugin/$id"
+          if (-not (Test-Path "$plugin/plugin.toml")) { Write-Output "::error::$plugin was not built"; exit 1 }
+          Add-Type -AssemblyName System.IO.Compression.FileSystem
+          New-Item -ItemType Directory dist -Force | Out-Null
+          [IO.Compression.ZipFile]::CreateFromDirectory((Resolve-Path $plugin), "$PWD/dist/$id-$version.zip",
+              [IO.Compression.CompressionLevel]::Optimal, $true)
+
+          $stage = "build/workshop"
+          Remove-Item $stage -Recurse -Force -ErrorAction Ignore
+          New-Item -ItemType Directory "$stage/$id/anvil" -Force | Out-Null
+          Copy-Item $plugin "$stage/$id/anvil/$id" -Recurse
+          $descriptor = (Get-Content workshop/descriptor.mod) -replace '^version=".*"$', "version=`"$version`""
+          Set-Content "$stage/$id/descriptor.mod" $descriptor -Encoding utf8
+          Set-Content "$stage/$id.mod" ($descriptor + "path=`"mod/$id`"") -Encoding utf8
+          [IO.Compression.ZipFile]::CreateFromDirectory((Resolve-Path $stage), "$PWD/dist/$id-$version-workshop.zip",
+              [IO.Compression.CompressionLevel]::Optimal, $false)
+
+          foreach ($zip in Get-ChildItem dist/*.zip) {
+              Write-Output "${zip}:"
+              [IO.Compression.ZipFile]::OpenRead($zip).Entries | ForEach-Object { "  $($_.FullName)" }
+          }
+
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: plugin-${{ github.sha }}
+          path: dist/*.zip
+          if-no-files-found: error
