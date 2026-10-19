@@ -91,6 +91,14 @@ Now replace `src/plugin.cpp` with your own plugin. `anvil.hpp` (the C++ wrapper)
 the player's values in `<EU4>/anvil/data/<id>/settings.toml`. Remove `settings` from
 `plugin.toml` and the include from `src/plugin.cpp` when the plugin has none.
 
+## Updating the SDK
+
+The SDK version is the one place `CMakeLists.txt` names: the `FetchContent_Declare` of
+`anvil_sdk`. Before Anvil 1.0 that is a commit of Anvil's `main` (`GIT_TAG`); move it to
+a newer commit to get its fixes. From 1.0 on it is a release URL with its `URL_HASH`
+from the release's `SHA256SUMS.txt`. After a change, delete `build/` (or run a fresh
+configure) and rerun the `-check` target with `EU4_EXE` set.
+
 ## CI and releases
 
 `.github/workflows/build.yml` runs on every pull request and push to `main`:
