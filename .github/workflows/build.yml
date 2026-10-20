@@ -31,11 +31,9 @@ jobs:
       - name: anvil check
         shell: pwsh
         run: |
-          # The first path is the SDK archive of an Anvil release, the second the
-          # SDK built from Anvil's sources (until Anvil 1.0, see CMakeLists.txt).
-          $anvil = 'build/_deps/anvil_sdk-src/bin/anvil.exe', 'build/_deps/anvil_sdk-build/Release/anvil.exe' |
-              Where-Object { Test-Path $_ } | Select-Object -First 1
-          if (-not $anvil) { Write-Output '::error::anvil.exe not found under build/_deps'; exit 1 }
+          # anvil.exe of the SDK archive that CMakeLists.txt fetches.
+          $anvil = 'build/_deps/anvil_sdk-src/bin/anvil.exe'
+          if (-not (Test-Path $anvil)) { Write-Output "::error::$anvil not found"; exit 1 }
           & $anvil --version
           & $anvil check . --format github
           exit $LASTEXITCODE
