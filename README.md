@@ -192,11 +192,11 @@ Once per plugin:
 
 4. **Turn publishing on:** `gh variable set WORKSHOP_PUBLISH --body true`.
 
-Then, for each release, merge the release pull request, edit the draft release's notes if
-you like and **publish the draft**. `workshop-publish.yml` downloads the release's
-`<id>-<version>.zip`, checks its build attestation (`gh attestation verify`, so exactly
-the build that `release.yml` attested is published), unpacks it into `workshop/anvil/<id>/`
-and publishes the mod, with the release notes as the Workshop change note. The Workshop
+Then, for each release, merge the release pull request, wait until `release.yml` has
+attached the zips to the draft release, edit its notes if you like and **publish the
+draft**. `workshop-publish.yml` downloads the release's `<id>-<version>.zip`, checks its
+build attestation (`gh attestation verify`, so exactly the build that `release.yml`
+attested is published), unpacks it into `workshop/anvil/<id>/` and publishes the mod, with the release notes as the Workshop change note. The Workshop
 description is left as you write it on Steam, unless you set `description` in
 `workshop.toml`; then every publish replaces it. When the session expires, the job fails
 with exit code 3: run `pdx-ws session export` again.
