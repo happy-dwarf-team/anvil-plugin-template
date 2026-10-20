@@ -8,11 +8,8 @@ and releases it as a zip for `anvil/plugins/` and as a mod folder for the Worksh
 The example plugin hooks a function (the game-speed object), hooks the middle of another
 one (the return to the main menu) and has one setting.
 
-> **Before Anvil 1.0.** Plugin API 2 ships with Anvil 1.0, which is not released yet.
-> Until then `CMakeLists.txt` builds the SDK from Anvil's sources at a pinned commit, and
-> loading the plugin in the game needs an Anvil built from the same `main`
-> ([its README](https://github.com/happy-dwarf-team/anvil#readme)). Anvil 0.2 loads only
-> API 1 plugins.
+The plugin uses plugin API 2 and needs [Anvil](https://github.com/happy-dwarf-team/anvil#readme)
+1.0 or newer in the game.
 
 ## Your first plugin in 15 minutes
 
@@ -50,8 +47,7 @@ folder).
    cmake --build build --config Release
    ```
 
-   The first configure fetches the SDK (before Anvil 1.0 it also builds `anvil.exe`,
-   which takes a few minutes). The plugin lands in `build/plugin/my-plugin/`:
+   The first configure downloads the SDK archive of the Anvil release. The plugin lands in `build/plugin/my-plugin/`:
    `plugin.toml`, `symbols.toml`, `settings.toml` and `my_plugin.dll`.
 
 5. **Check it against the game.**
@@ -94,9 +90,8 @@ the player's values in `<EU4>/anvil/data/<id>/settings.toml`. Remove `settings` 
 ## Updating the SDK
 
 The SDK version is the one place `CMakeLists.txt` names: the `FetchContent_Declare` of
-`anvil_sdk`. Before Anvil 1.0 that is a commit of Anvil's `main` (`GIT_TAG`); move it to
-a newer commit to get its fixes. From 1.0 on it is a release URL with its `URL_HASH`
-from the release's `SHA256SUMS.txt`. After a change, delete `build/` (or run a fresh
+`anvil_sdk`: a release URL with its `URL_HASH` from the release's `SHA256SUMS.txt`. A
+newer release of the same major version keeps plugins working. After a change, delete `build/` (or run a fresh
 configure) and rerun the `-check` target with `EU4_EXE` set.
 
 ## CI and releases

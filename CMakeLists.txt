@@ -3,26 +3,12 @@ project(my_plugin LANGUAGES CXX)
 
 include(FetchContent)
 
-# The Anvil SDK: the AnvilPlugin CMake package (anvil_add_plugin) and anvil.exe.
-#
-# TODO(happy-dwarf-team/anvil#57): no Anvil release carries the SDK archive yet.
-# Until v1.0.0 is out, the SDK is built from Anvil's sources at a pinned commit
-# of main (only anvil.exe and the headers are used; tests, examples and
-# benchmarks are off). After the 1.0 release, replace this block with:
-#
-#   FetchContent_Declare(anvil_sdk
-#       URL https://github.com/happy-dwarf-team/anvil/releases/download/v1.0.0/anvil-sdk-windows-x64.zip
-#       URL_HASH SHA256=<hash of anvil-sdk-windows-x64.zip in the release's SHA256SUMS.txt>)
-#   FetchContent_MakeAvailable(anvil_sdk)
-#
-# and drop the second anvil.exe path in .github/workflows/build.yml.
-set(ANVIL_BUILD_TESTS OFF)
-set(ANVIL_BUILD_EXAMPLES OFF)
-set(ANVIL_BUILD_BENCH OFF)
+# The Anvil SDK: the AnvilPlugin CMake package (anvil_add_plugin) and anvil.exe,
+# from the SDK archive of an Anvil release. URL_HASH is the archive's line in
+# the release's SHA256SUMS.txt.
 FetchContent_Declare(anvil_sdk
-    GIT_REPOSITORY https://github.com/happy-dwarf-team/anvil.git
-    GIT_TAG 51c8ac46350f2598c800c7f52bf85d21ec163b39  # main, 2026-10-20
-    EXCLUDE_FROM_ALL)
+    URL https://github.com/happy-dwarf-team/anvil/releases/download/v1.0.0/anvil-sdk-windows-x64.zip
+    URL_HASH SHA256=e8ca738da4ead81f17e8e548447057c8f2b1df0529c7b00185a2f531d4ea89fe)
 FetchContent_MakeAvailable(anvil_sdk)
 
 # Reads plugin.toml, runs `anvil gen` on symbols.toml and settings.toml, builds
