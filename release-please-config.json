@@ -5,8 +5,11 @@
     ".": {
       "release-type": "simple",
       "bump-minor-pre-major": true,
+      "draft": true,
+      "force-tag-creation": true,
       "extra-files": [
-        { "type": "toml", "path": "plugin.toml", "jsonpath": "$.version" }
+        { "type": "toml", "path": "plugin.toml", "jsonpath": "$.version" },
+        { "type": "generic", "path": "workshop/descriptor.mod" }
       ],
       "changelog-sections": [
         { "type": "feat", "section": "Features" },

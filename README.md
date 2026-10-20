@@ -3,7 +3,8 @@
 A starting point for an [Anvil](https://github.com/happy-dwarf-team/anvil) plugin for
 Europa Universalis IV 1.37.5 (Steam, Windows x64), written in C++20 against plugin API 2.
 It builds with the Anvil SDK's CMake package, checks the plugin in CI without the game
-and releases it as a zip for `anvil/plugins/` and as a mod folder for the Workshop.
+and releases it as a zip for `anvil/plugins/` and as a mod folder for the Workshop, which
+it can also publish to the Steam Workshop.
 
 The example plugin hooks a function (the game-speed object), hooks the middle of another
 one (the return to the main menu) and has one setting.
@@ -28,7 +29,8 @@ folder).
    | --- | --- |
    | `plugin.toml` | `id`, `name`, `entry` (the DLL), `authors`, `description`, `issues`, `repository`, `affects_gameplay` |
    | `CMakeLists.txt` | `project(my_plugin …)` and the target in `anvil_add_plugin(my_plugin …)`; the `my_plugin-check` and `my_plugin-deploy` targets follow it |
-   | `workshop/descriptor.mod` | `name` (the mod's name in the launcher) |
+   | `workshop/descriptor.mod` | `name` (the mod's name in the launcher and on the Workshop) |
+   | `workshop/thumbnail.png` | the Workshop preview (a placeholder; under 1 MB) |
    | `LICENSE` | the copyright holder, or another license |
 
 3. **Declare your symbols.** Every game address the plugin touches is a
@@ -101,14 +103,20 @@ configure) and rerun the `-check` target with `EU4_EXE` set.
 - builds the plugin with warnings as errors;
 - runs `anvil check . --format github`: the schemas of the three TOML files and the
   `symbols.lock` check, as annotations on the files;
-- packages both release zips (below) and keeps them as the run's artifact.
+- packages both release zips (below) and keeps them as the run's artifact;
+- copies the plugin into `workshop/anvil/<id>/` and runs a dry run of
+  [paradox-workshop-publish](https://github.com/happy-dwarf-team/paradox-workshop-publish):
+  the job summary shows what a release would publish to the Steam Workshop, and the job
+  fails when the mod would change the game's checksum. It needs no secrets.
 
 `pr-title.yml` checks that pull request titles follow
 [Conventional Commits](https://www.conventionalcommits.org/) (see
 [CONTRIBUTING.md](CONTRIBUTING.md)); they become the changelog. `release.yml` runs
 [release-please](https://github.com/googleapis/release-please): it keeps a release pull
-request with the next version (in `version.txt` and `plugin.toml`) and `CHANGELOG.md`.
-Merging it tags `vX.Y.Z` and attaches to the GitHub release:
+request with the next version (in `version.txt`, `plugin.toml` and
+`workshop/descriptor.mod`) and `CHANGELOG.md`. Merging it tags `vX.Y.Z` and creates a
+**draft** GitHub release with these assets; publish the draft on GitHub to make the
+release public:
 
 | Asset | For |
 | --- | --- |
@@ -116,7 +124,8 @@ Merging it tags `vX.Y.Z` and attaches to the GitHub release:
 | `<id>-<version>-workshop.zip` | you: unpack into `Documents/Paradox Interactive/Europa Universalis IV/mod/` and upload the mod with the Paradox launcher |
 | `SHA256SUMS.txt` | the hashes; the zips also get a build attestation |
 
-The Workshop mod holds only `descriptor.mod` and `anvil/<id>/`, which keeps the game's
+The Workshop mod holds only `descriptor.mod` and `anvil/<id>/` (and the preview image
+when [published from CI](#publish-to-the-steam-workshop)), which keeps the game's
 checksum and ironman achievements. Anvil loads plugins from enabled mods from version 1.3
 on, after the player approves each version
 ([design §14](https://github.com/happy-dwarf-team/anvil/blob/main/docs/design.md));
@@ -133,6 +142,65 @@ Repository settings that make this work (Settings on GitHub):
 - Optional secret `RELEASE_PLEASE_TOKEN` (a fine-grained token with contents and pull
   requests write): with it, CI also runs on the release pull request.
 
+## Publish to the Steam Workshop
+
+`.github/workflows/workshop-publish.yml` publishes the plugin as a Steam Workshop mod with
+[paradox-workshop-publish](https://github.com/happy-dwarf-team/paradox-workshop-publish)
+(`pdx-ws`) each time you publish a release. It is off until you turn it on: Anvil loads
+plugins from Workshop mods from version 1.3 on, and not every plugin needs a Workshop item.
+
+The mod is the `workshop/` folder (`workshop.toml`): `descriptor.mod`, `thumbnail.png`
+and `anvil/<id>/`, the built plugin, which is not in Git. `checksum = "keep"` makes
+`pdx-ws` refuse a mod that would change the game's checksum.
+
+Once per plugin:
+
+1. **Install `pdx-ws`** from its
+   [releases](https://github.com/happy-dwarf-team/paradox-workshop-publish/releases)
+   ([setup guide](https://github.com/happy-dwarf-team/paradox-workshop-publish/blob/main/docs/guide/setup.md)).
+
+2. **Create the Workshop item** on your computer, with Steam running and logged in to the
+   account that owns EU4 and will own the item. Build the plugin, copy it into the mod and
+   check the plan first:
+
+   ```
+   cmake --build build --config Release
+   New-Item -ItemType Directory workshop/anvil -Force
+   Copy-Item build/plugin/my-plugin workshop/anvil -Recurse -Force
+   pdx-ws plan
+   pdx-ws init
+   ```
+
+   `pdx-ws init` (client mode, through the Steam client) creates a **private** item with
+   the descriptor's name and tags and the preview, uploads the mod and writes the item's
+   `remote_file_id` into `workshop/descriptor.mod`. Commit that line through a pull
+   request; every later publish finds the item by it. Make the item public on Steam when
+   you are ready: publishing never changes its visibility.
+
+3. **Save a Steam session** in a `steam-workshop` environment. Read the
+   [security notes](https://github.com/happy-dwarf-team/paradox-workshop-publish/blob/main/docs/guide/security.md)
+   first; `session export` asks for your password and Steam Guard code once.
+
+   ```
+   gh api --method PUT repos/OWNER/REPO/environments/steam-workshop
+   pdx-ws session export --user my_steam_name | gh secret set STEAM_SESSION --env steam-workshop
+   gh secret set STEAM_USERNAME --env steam-workshop --body my_steam_name
+   ```
+
+   In **Settings → Environments → steam-workshop**, add yourself as a required reviewer
+   and allow only the tags `v*`.
+
+4. **Turn publishing on:** `gh variable set WORKSHOP_PUBLISH --body true`.
+
+Then, for each release, merge the release pull request, edit the draft release's notes if
+you like and **publish the draft**. `workshop-publish.yml` downloads the release's
+`<id>-<version>.zip`, checks its build attestation (`gh attestation verify`, so exactly
+the build that `release.yml` attested is published), unpacks it into `workshop/anvil/<id>/`
+and publishes the mod, with the release notes as the Workshop change note. The Workshop
+description is left as you write it on Steam, unless you set `description` in
+`workshop.toml`; then every publish replaces it. When the session expires, the job fails
+with exit code 3: run `pdx-ws session export` again.
+
 ## Files
 
 | Path | What |
@@ -143,8 +211,10 @@ Repository settings that make this work (Settings on GitHub):
 | `settings.toml` | the player's settings |
 | `src/plugin.cpp` | the plugin |
 | `CMakeLists.txt` | fetches the Anvil SDK and calls `anvil_add_plugin` |
-| `workshop/descriptor.mod` | the mod descriptor of the Workshop zip (its `version` comes from `plugin.toml`) |
-| `.github/` | CI, pull request titles, releases, Dependabot for the pinned actions |
+| `workshop/descriptor.mod` | the mod descriptor: its `version` is kept by release-please, and `pdx-ws init` adds `remote_file_id` |
+| `workshop/thumbnail.png` | the Workshop preview |
+| `workshop.toml` | how `pdx-ws` publishes `workshop/` to the Steam Workshop |
+| `.github/` | CI, pull request titles, releases, Workshop publishing, Dependabot for the pinned actions |
 
 ## License
 
