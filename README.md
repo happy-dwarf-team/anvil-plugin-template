@@ -127,10 +127,10 @@ release public:
 
 The Workshop mod holds only `descriptor.mod` and `anvil/<id>/` (and the preview image
 when [published from CI](#publish-to-the-steam-workshop)), which keeps the game's
-checksum and ironman achievements. Anvil loads plugins from enabled mods from version 1.3
-on, after the player approves each version
+checksum and ironman achievements. Anvil 1.3 and newer load plugins from enabled mods
+after the player approves each version
 ([design §14](https://github.com/happy-dwarf-team/anvil/blob/main/docs/design.md));
-until then players install the plugin zip.
+players with an older Anvil install the plugin zip.
 
 Repository settings that make this work (Settings on GitHub):
 
