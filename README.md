@@ -31,7 +31,7 @@ folder).
    | `CMakeLists.txt` | `project(my_plugin …)` and the target in `anvil_add_plugin(my_plugin …)`; the `my_plugin-check` and `my_plugin-deploy` targets follow it |
    | `workshop/descriptor.mod` | `name`, the mod's name in the launcher and on the Workshop: `<Name> - <what it does>`, e.g. `Bellows - Faster Game Start` |
    | `workshop/description.md` | the Workshop description, from the skeleton, by the [Workshop page convention](https://github.com/happy-dwarf-team/.github/blob/main/docs/workshop-pages.md); replace `OWNER/REPO` |
-   | `workshop/thumbnail.png` | the Workshop preview (a placeholder; under 1 MB) |
+   | `workshop/thumbnail.png` | the Workshop preview: a placeholder. Generate the real one with [tools/workshop-thumbnail](https://github.com/happy-dwarf-team/.github/tree/main/tools/workshop-thumbnail) from your plugin's icon on the Anvil website (add the icon to anvil-website first) |
    | `LICENSE` | the copyright holder, or another license |
 
 3. **Declare your symbols.** Every game address the plugin touches is a
