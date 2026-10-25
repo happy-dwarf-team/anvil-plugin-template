@@ -191,6 +191,12 @@ Once per plugin:
    In **Settings → Environments → steam-workshop**, add yourself as a required reviewer
    and allow only the tags `v*`.
 
+   Publishing several plugins from one GitHub organization? One session can serve them all
+   as organization secrets limited to those repositories; the environment then keeps no
+   secrets of its own but still gates every publish. Every workflow in those repositories
+   can read an organization secret, so the
+   [setup guide](https://github.com/happy-dwarf-team/paradox-workshop-publish/blob/main/docs/guide/setup.md#several-repositories-in-one-organization) explains when that is acceptable.
+
 4. **Turn publishing on:** `gh variable set WORKSHOP_PUBLISH --body true`.
 
 Then, for each release, merge the release pull request, wait until `release.yml` has
