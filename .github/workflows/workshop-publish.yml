@@ -9,9 +9,9 @@ name: workshop-publish
 # Opt-in: it runs only when the repository variable WORKSHOP_PUBLISH is `true`
 # (Settings → Secrets and variables → Actions → Variables). Anvil loads plugins
 # from Workshop mods from version 1.3 on. It also needs remote_file_id in
-# workshop/descriptor.mod (`pdx-ws init`) and the `steam-workshop` environment
-# with the secrets STEAM_USERNAME and STEAM_SESSION; see the README,
-# "Publish to the Steam Workshop".
+# workshop/descriptor.mod (`pdx-ws init`), the `steam-workshop` environment and
+# the secrets STEAM_USERNAME and STEAM_SESSION, in the environment or shared as
+# organization secrets; see the README, "Publish to the Steam Workshop".
 on:
   release:
     types: [published]
