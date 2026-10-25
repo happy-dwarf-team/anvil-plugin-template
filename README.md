@@ -220,3 +220,6 @@ with exit code 3: run `pdx-ws session export` again.
 ## License
 
 [MIT](LICENSE). Change it for your plugin as you like.
+
+Anvil plugin template is an unofficial community project, not affiliated with or endorsed
+by Paradox Interactive.
