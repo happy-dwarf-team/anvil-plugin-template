@@ -29,6 +29,14 @@ Anvil asks again after every update. Until you approve, the version you trusted 
 
 ![](https://i.imgur.com/Uf8Z21n.png)
 
+## More from Happy Dwarf Team
+- **[Anvil](https://anvil.happydwarf.dev/)**: one plain sentence about what Anvil gives a player.
+- **[Another plugin or mod](https://steamcommunity.com/sharedfiles/filedetails/?id=WORKSHOP_ID)**: what it gives this page's player or tester. Keep only what helps them; 3–5 entries in all.
+- **[Etch](https://etch.happydwarf.dev/)**: for interface modders, see your `.gui` window as the game draws it, right in VS Code.
+- Everything we make: [happydwarf.dev](https://happydwarf.dev/)
+
+![](https://i.imgur.com/Uf8Z21n.png)
+
 ### Alternative download
 [GitHub](https://github.com/OWNER/REPO)
 
