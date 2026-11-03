@@ -1,0 +1,73 @@
+name: Bug report
+description: A crash, a different game behaviour or errors with this plugin installed.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. Security problems go through private reporting (the repository's **Security** tab), not public issues.
+        Please narrow it down first: does the problem go away when the plugin is turned off in Anvil Manager (or its folder is removed from `anvil/plugins/`)?
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What you saw, and what you expected instead. Screenshots help.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+    validations:
+      required: true
+  - type: input
+    id: versions
+    attributes:
+      label: Plugin and Anvil versions
+      description: "From `anvil/anvil.log`: its first line (e.g. `Anvil 1.8.0 (plugin API 2)`) and the plugin's line (e.g. `my-plugin 0.1.0: loaded`)."
+    validations:
+      required: true
+  - type: input
+    id: game-build
+    attributes:
+      label: Game build
+      description: The `game build:` line of `anvil/anvil.log`, and the game version shown in the launcher.
+    validations:
+      required: true
+  - type: dropdown
+    id: without-plugin
+    attributes:
+      label: Does it happen without the plugin?
+      options:
+        - "No, only with this plugin"
+        - "Yes, also without it (probably not this plugin)"
+        - Not tested
+    validations:
+      required: true
+  - type: textarea
+    id: settings
+    attributes:
+      label: Changed settings
+      description: Contents of `anvil/data/<plugin-id>/settings.toml` (only the settings you changed; empty or missing means the defaults).
+      render: toml
+  - type: textarea
+    id: mods
+    attributes:
+      label: Enabled mods and other plugins
+      description: The mods of the playset and the other Anvil plugins with their versions (or "none").
+    validations:
+      required: true
+  - type: textarea
+    id: crash
+    attributes:
+      label: Crash report
+      description: After a crash, the `.txt` report from `anvil/crashes/` (the Anvil Manager's **Crashes** tab copies it). Leave empty if the game did not crash.
+      render: text
+  - type: textarea
+    id: log
+    attributes:
+      label: anvil/anvil.log
+      description: The whole file from the start where the problem happened. Check it for anything you do not want to share, such as your Windows user name in paths.
+      render: text
+    validations:
+      required: true

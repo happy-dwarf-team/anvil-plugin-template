@@ -33,6 +33,7 @@ folder).
    | `workshop/description.md` | the Workshop description, from the skeleton, by the [Workshop page convention](https://github.com/happy-dwarf-team/.github/blob/main/docs/workshop-pages.md); replace `OWNER/REPO` |
    | `workshop/thumbnail.png` | the Workshop preview: a placeholder. Generate the real one with [tools/workshop-thumbnail](https://github.com/happy-dwarf-team/.github/tree/main/tools/workshop-thumbnail) from your plugin's icon on the Anvil website (add the icon to anvil-website first) |
    | `LICENSE` | the copyright holder, or another license |
+   | `.github/ISSUE_TEMPLATE/` | nothing needed: the bug form asks your players for `anvil.log`, the game build, the versions and a crash report; add a hint for narrowing down that fits your plugin, as Bellows asks for the module set to `off` |
 
 3. **Declare your symbols.** Every game address the plugin touches is a
    `[symbol.<name>]` in `symbols.toml`: its `rva`, the `bytes` expected there, the
