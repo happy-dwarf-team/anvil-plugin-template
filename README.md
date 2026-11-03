@@ -1,7 +1,8 @@
 # Anvil plugin template
 
 A starting point for an [Anvil](https://github.com/happy-dwarf-team/anvil) plugin for
-Europa Universalis IV 1.37.5 (Steam, Windows x64), written in C++20 against plugin API 2.
+Europa Universalis IV 1.37.5 (Windows x64, the Steam build and the GOG build 1.37.5.2), written in
+C++20 against plugin API 2.
 It builds with the Anvil SDK's CMake package, checks the plugin in CI without the game
 and releases it as a zip for `anvil/plugins/` and as a mod folder for the Workshop, which
 it can also publish to the Steam Workshop.
@@ -10,7 +11,7 @@ The example plugin hooks a function (the game-speed object), hooks the middle of
 one (the return to the main menu) and has one setting.
 
 The plugin uses plugin API 2 and needs [Anvil](https://github.com/happy-dwarf-team/anvil#readme)
-1.0 or newer in the game.
+1.7 or newer in the game, the first that reads a `symbols.toml` for several builds.
 
 ## Your first plugin in 15 minutes
 
@@ -38,7 +39,9 @@ folder).
 3. **Declare your symbols.** Every game address the plugin touches is a
    `[symbol.<name>]` in `symbols.toml`: its `rva`, the `bytes` expected there, the
    `memory` kind and, for a function, its C `signature`. The two symbols in the template
-   are real for the Steam 1.37.5 `eu4.exe`. `anvil gen` turns them into
+   are real for the Steam 1.37.5 and the GOG 1.37.5.2 `eu4.exe`: `builds` lists both,
+   and where a symbol lies or what bytes it has differs, a `build."<id>"` table says
+   it per build (see [Steam and GOG](#steam-and-gog)). `anvil gen` turns them into
    `symbols.gen.hpp` at build time (`sym::speed_object`), so a hook whose function does
    not match the signature does not compile. See
    [design §5](https://github.com/happy-dwarf-team/anvil/blob/main/docs/design.md) for
@@ -61,9 +64,11 @@ folder).
    ```
 
    `anvil check --exe` verifies every symbol against `eu4.exe` (build, bytes, memory,
-   instruction boundaries) and rewrites `symbols.lock`. Commit `symbols.lock` with
-   `symbols.toml`: CI has no game, so it fails when the lock does not match
-   `symbols.toml` or says `result = "problems"`.
+   instruction boundaries) and rewrites `symbols.lock`, which keeps one `[[check]]` per
+   build. With both builds declared, run it once more with `EU4_EXE` at the other
+   build's `eu4.exe` (or drop the build you cannot check from `builds`). Commit
+   `symbols.lock` with `symbols.toml`: CI has no game, so it fails when the lock does
+   not match `symbols.toml`, misses a declared build or says `result = "problems"`.
 
 6. **Deploy.**
 
@@ -83,6 +88,28 @@ folder).
 
 Now replace `src/plugin.cpp` with your own plugin. `anvil.hpp` (the C++ wrapper) and
 `anvil_plugin.h` (the C API underneath) document every host call.
+
+## Steam and GOG
+
+Anvil knows two builds of EU4 1.37.5: Steam (`eu4-1.37.5-steam-win64`) and GOG 1.37.5.2
+(`eu4-1.37.5.2-gog-win64`). A plugin runs only on the builds its `symbols.toml` lists, so
+the template lists both, and a new symbol needs its place in both:
+
+- **The same bytes at another address** (`idle_exit`): `bytes` once, an `rva` per build in
+  `build."<id>" = { rva = … }`.
+- **Other bytes** (`speed_object` reads a field that is 0x10 lower on GOG): `rva` and
+  `bytes` in a `[symbol.<name>.build."<id>"]` table each. A `values` entry whose number
+  differs by build has no `anvil gen` constant; read it with `Host::value` when the plugin
+  loads.
+- **Finding it on GOG:** GOG ships `eu4.pdb` next to `eu4.exe`, so a debugger or a
+  disassembler names the function; most functions kept their bytes apart from addresses
+  and some offsets. Run the `-check` target with each build's `eu4.exe`.
+- **One build only:** write `build = "<id>"` and give `rva` and `bytes` directly. On the
+  other build Anvil skips the plugin and the game starts without it.
+
+The Steam Workshop serves Steam players only; GOG players install the release zip.
+[Anvil's design §5.2](https://github.com/happy-dwarf-team/anvil/blob/main/docs/design.md)
+has every rule of the format.
 
 ## Settings
 
