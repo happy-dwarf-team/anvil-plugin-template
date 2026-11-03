@@ -8,8 +8,8 @@ What the plugin gives a player, in two or three sentences of a player's words: w
 - **Safe to keep on:** no game files change, so ironman achievements stay available. Say honestly what it does to gameplay and multiplayer.
 
 ## You need
-- **[Anvil](https://anvil.happydwarf.dev/) 1.3 or newer** in the game folder. Download it once from its website: the Workshop can't install it for you.
-- **EU4 1.37.5** on Steam (Windows). Say whether the GOG build 1.37.5.2 works, with the plugin from GitHub.
+- **[Anvil](https://anvil.happydwarf.dev/) 1.7 or newer** in the game folder. Download it once from its website: the Workshop can't install it for you.
+- **EU4 1.37.5** on Steam (Windows). The GOG build 1.37.5.2 works too, with the plugin from GitHub (drop this if your plugin declares Steam only).
 - After subscribing, start the game, approve the plugin in Anvil (Ctrl+Shift+F12, then Mods) and restart. Anvil asks again after every update.
 
 ![](https://i.imgur.com/Uf8Z21n.png)
