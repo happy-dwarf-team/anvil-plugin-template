@@ -7,15 +7,65 @@ What the plugin gives a player, in two or three sentences of a player's words: w
 - **Another thing:** 3–5 points in all, one line each.
 - **Safe to keep on:** no game files change, so ironman achievements stay available. Say honestly what it does to gameplay and multiplayer.
 
-## You need
-- **[Anvil](https://anvil.happydwarf.dev/) 1.7 or newer** in the game folder. Download it once from its website: the Workshop can't install it for you.
-- **EU4 1.37.5** on Steam (Windows). The GOG build 1.37.5.2 works too, with the plugin from GitHub (drop this if your plugin declares Steam only).
-- After subscribing, start the game, approve the plugin in Anvil (Ctrl+Shift+F12, then Mods) and restart. Anvil asks again after every update.
+![](https://i.imgur.com/Uf8Z21n.png)
+
+## Before you subscribe
+- **[Anvil](https://anvil.happydwarf.dev/) 1.7 or newer** must be installed in the game folder. Get it from [anvil.happydwarf.dev](https://anvil.happydwarf.dev/) and press Download. The Workshop can't install it for you: a dwarf has to carry it in by hand, once.
+- **EU4 1.37.5** (Steam, Windows). On any other version the plugin stays out of the way and the game starts as usual.
+- **Playing on GOG?** The GOG build 1.37.5.2 works too, but GOG has no Workshop: see the FAQ below. (Drop this line and the GOG question if your plugin declares Steam only.)
 
 ![](https://i.imgur.com/Uf8Z21n.png)
 
-**More:** [plugin page](https://anvil.happydwarf.dev/plugins/PLUGIN_ID/) · [GitHub](https://github.com/OWNER/REPO)
+## Getting it running
+1. Subscribe and enable the mod in your playset.
+2. Start the game. Anvil will tell you a new plugin is waiting.
+3. Press **Ctrl+Shift+F12**, open **Mods** and approve it. You can also approve it before playing, in Anvil Manager.
+4. Restart.
 
-**More from Happy Dwarf Team:** [Anvil](https://anvil.happydwarf.dev/) · [another plugin or mod, what it gives this player](https://steamcommunity.com/sharedfiles/filedetails/?id=WORKSHOP_ID) · [happydwarf.dev](https://happydwarf.dev/)
+Anvil asks again after every update. Until you approve, the version you trusted before keeps working.
 
-**Credits:** the people and projects this plugin builds on, with their licence where it asks for a notice, and one personal, joking line. The little dwarf head on the thumbnail? The repository belongs to Happy Dwarf Team, and I am, in fact, a happy dwarf myself.
+![](https://i.imgur.com/Uf8Z21n.png)
+
+## What it doesn't touch
+- No game files: the files the game checks stay the same, so ironman achievements stay available.
+- Gameplay and multiplayer: say honestly what changes and what doesn't.
+- Unsubscribe and it's gone.
+
+![](https://i.imgur.com/Uf8Z21n.png)
+
+## More from Happy Dwarf Team
+- **[Anvil](https://anvil.happydwarf.dev/)**: one plain sentence about what Anvil gives a player.
+- **[Another plugin or mod](https://steamcommunity.com/sharedfiles/filedetails/?id=WORKSHOP_ID)**: what it gives this page's player or tester. Keep only what helps them; 3–5 entries in all.
+- **[Etch](https://etch.happydwarf.dev/)**: for interface modders, see your `.gui` window as the game draws it, right in VS Code.
+- Everything we make: [happydwarf.dev](https://happydwarf.dev/)
+
+![](https://i.imgur.com/Uf8Z21n.png)
+
+### Alternative download
+[GitHub](https://github.com/OWNER/REPO), also for the GOG build. The plugin page: [anvil.happydwarf.dev/plugins/PLUGIN_ID](https://anvil.happydwarf.dev/plugins/PLUGIN_ID/).
+
+![](https://i.imgur.com/Uf8Z21n.png)
+
+## FAQ
+
+### Why do I have to approve it?
+The plugin is a real program running inside your game, not just a pile of text files. Anvil makes sure nothing like that runs without your nod. Trust, but verify. Dwarf law.
+
+### A question players really ask
+A short answer first, the joke after it.
+
+### I play on GOG. Can I use it?
+Yes, on the GOG build 1.37.5.2. GOG has no Workshop, so install the plugin from the release zip on [GitHub](https://github.com/OWNER/REPO/releases) (or from the **Catalog** tab in Anvil Manager, once the plugin is listed there).
+
+### What is that little dwarf head on the thumbnail?
+If you check the mod's GitHub page, you will notice the repository belongs to Happy Dwarf Team.
+
+I like dwarves.
+I like being happy.
+I am, in fact, a happy dwarf myself.
+
+![](https://i.imgur.com/Uf8Z21n.png)
+
+## Credits
+**The people and projects this plugin builds on.**
+**One personal, joking line at the end.**
