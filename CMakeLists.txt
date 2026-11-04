@@ -15,3 +15,8 @@ FetchContent_MakeAvailable(anvil_sdk)
 # the DLL and lays out build/plugin/<id>/. Adds my_plugin-check and, with
 # -DEU4_DIR=<game folder>, my_plugin-deploy.
 anvil_add_plugin(my_plugin SOURCES src/plugin.cpp)
+
+# The licence asks to go with every copy: the release zip and the Workshop mod are
+# this folder.
+add_custom_command(TARGET my_plugin POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE" "$<TARGET_FILE_DIR:my_plugin>/LICENSE")
