@@ -10,8 +10,10 @@ it can also publish to the Steam Workshop.
 The example plugin hooks a function (the game-speed object), hooks the middle of another
 one (the return to the main menu) and has one setting.
 
-The plugin uses plugin API 2 and needs [Anvil](https://github.com/happy-dwarf-team/anvil#readme)
-1.7 or newer in the game, the first that reads a `symbols.toml` for several builds.
+The plugin uses plugin API 2 and needs [Anvil](https://anvil.happydwarf.dev/docs/install/)
+1.7 or newer in the game, the first that reads a `symbols.toml` for several builds. The
+[plugin docs](https://anvil.happydwarf.dev/docs/plugins/overview/) cover the manifest, the
+host API and publishing.
 
 ## Your first plugin in 15 minutes
 
@@ -29,7 +31,7 @@ folder).
    | File | What to change |
    | --- | --- |
    | `plugin.toml` | `id`, `name`, `entry` (the DLL), `authors`, `description`, `issues`, `repository`, `affects_gameplay` |
-   | `CMakeLists.txt` | `project(my_plugin …)` and the target in `anvil_add_plugin(my_plugin …)`; the `my_plugin-check` and `my_plugin-deploy` targets follow it |
+   | `CMakeLists.txt` | `project(my_plugin …)`; the target and the `my_plugin-check` and `my_plugin-deploy` targets follow it |
    | `workshop/descriptor.mod` | `name`, the mod's name in the launcher and on the Workshop: `<Name> - <what it does>`, e.g. `Bellows - Faster Game Start` |
    | `workshop/description.md` | the Workshop description, from the skeleton, by the [Workshop page convention](https://github.com/happy-dwarf-team/.github/blob/main/docs/workshop-pages.md); replace `OWNER/REPO` and `PLUGIN_ID` |
    | `workshop/thumbnail.png` | the Workshop preview: a placeholder. Generate the real one with [tools/workshop-thumbnail](https://github.com/happy-dwarf-team/.github/tree/main/tools/workshop-thumbnail) from your plugin's icon on the Anvil website (add the icon to anvil-website first) |
@@ -43,9 +45,9 @@ folder).
    and where a symbol lies or what bytes it has differs, a `build."<id>"` table says
    it per build (see [Steam and GOG](#steam-and-gog)). `anvil gen` turns them into
    `symbols.gen.hpp` at build time (`sym::speed_object`), so a hook whose function does
-   not match the signature does not compile. See
-   [design §5](https://github.com/happy-dwarf-team/anvil/blob/main/docs/design.md) for
-   every key.
+   not match the signature does not compile. The
+   [manifest reference](https://anvil.happydwarf.dev/docs/plugins/manifest/#symbolstoml)
+   lists every key.
 
 4. **Build.** Point `EU4_EXE` at the game's `eu4.exe` and `EU4_DIR` at its folder:
 
@@ -65,10 +67,16 @@ folder).
 
    `anvil check --exe` verifies every symbol against `eu4.exe` (build, bytes, memory,
    instruction boundaries) and rewrites `symbols.lock`, which keeps one `[[check]]` per
-   build. With both builds declared, run it once more with `EU4_EXE` at the other
-   build's `eu4.exe` (or drop the build you cannot check from `builds`). Commit
-   `symbols.lock` with `symbols.toml`: CI has no game, so it fails when the lock does
-   not match `symbols.toml`, misses a declared build or says `result = "problems"`.
+   build. With both builds declared, run it once more with the other build's `eu4.exe`
+   (or drop the build you cannot check from `builds`):
+
+   ```
+   cmake -S . -B build -DEU4_EXE="C:/GOG Games/Europa Universalis IV/eu4.exe"
+   cmake --build build --config Release --target my_plugin-check
+   ```
+
+   Commit `symbols.lock` with `symbols.toml`: CI has no game, so it fails when the lock
+   does not match `symbols.toml`, misses a declared build or says `result = "problems"`.
 
 6. **Deploy.**
 
@@ -86,8 +94,10 @@ folder).
    verify, the log names the symbol and the byte, and the plugin is skipped while the
    game runs on.
 
-Now replace `src/plugin.cpp` with your own plugin. `anvil.hpp` (the C++ wrapper) and
-`anvil_plugin.h` (the C API underneath) document every host call.
+Now replace `src/plugin.cpp` with your own plugin. The
+[Host API](https://anvil.happydwarf.dev/docs/plugins/api/) lists what the host offers,
+such as the events and the game date of the standard plugin `anvil-game`. `anvil.hpp` (the
+C++ wrapper) and `anvil_plugin.h` (the C API underneath) document every host call.
 
 ## Steam and GOG
 
@@ -150,6 +160,7 @@ release public:
 | Asset | For |
 | --- | --- |
 | `<id>-<version>.zip` | players: unpack into `<EU4>/anvil/plugins/` |
+| `<id>-windows-x64.zip` | the same zip under a fixed name, for the [plugin catalog](https://anvil.happydwarf.dev/docs/plugins/catalog/) and download links |
 | `<id>-<version>-workshop.zip` | you: unpack into `Documents/Paradox Interactive/Europa Universalis IV/mod/` and upload the mod with the Paradox launcher |
 | `SHA256SUMS.txt` | the hashes; the zips also get a build attestation |
 

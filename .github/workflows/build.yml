@@ -47,6 +47,7 @@ jobs:
       # The release assets, built on every change so a release never packages
       # something CI has not seen:
       #   <id>-<version>.zip           the plugin folder, for <EU4>/anvil/plugins/
+      #   <id>-windows-x64.zip         the same under a fixed name, for the plugin catalog
       #   <id>-<version>-workshop.zip  a mod folder (descriptor.mod + anvil/<id>/)
       #                                for Documents/Paradox Interactive/Europa Universalis IV/mod/
       - name: Package
@@ -64,6 +65,7 @@ jobs:
           New-Item -ItemType Directory dist -Force | Out-Null
           [IO.Compression.ZipFile]::CreateFromDirectory((Resolve-Path $plugin), "$PWD/dist/$id-$version.zip",
               [IO.Compression.CompressionLevel]::Optimal, $true)
+          Copy-Item "dist/$id-$version.zip" "dist/$id-windows-x64.zip"
 
           $stage = "build/workshop"
           Remove-Item $stage -Recurse -Force -ErrorAction Ignore
