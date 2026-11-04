@@ -24,7 +24,7 @@ body:
     id: versions
     attributes:
       label: Plugin and Anvil versions
-      description: "From `anvil/anvil.log`: its first line (e.g. `Anvil 1.8.0 (plugin API 2)`) and the plugin's line (e.g. `my-plugin 0.1.0: loaded`)."
+      description: "From `anvil/anvil.log`: its first line (e.g. `Anvil 1.10.0 (plugin API 2)`) and the plugin's line (e.g. `my-plugin 0.1.0: loaded`)."
     validations:
       required: true
   - type: input
@@ -67,7 +67,7 @@ body:
     id: log
     attributes:
       label: anvil/anvil.log
-      description: The whole file from the start where the problem happened. Check it for anything you do not want to share, such as your Windows user name in paths.
+      description: "The Anvil Manager's **Log** tab has **Copy a problem report** (Anvil 1.9 or newer), which leaves your paths and user name out. Otherwise paste the whole file from the start where the problem happened, and check it for anything you do not want to share, such as your Windows user name in paths."
       render: text
     validations:
       required: true

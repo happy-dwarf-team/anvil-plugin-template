@@ -18,9 +18,12 @@ host API and publishing.
 ## Your first plugin in 15 minutes
 
 You need Windows x64, [Visual Studio 2022](https://visualstudio.microsoft.com/) or its
-Build Tools with **Desktop development with C++** (it brings CMake 3.25 or newer), Git,
-and EU4 1.37.5 with Anvil installed (`version.dll` next to `eu4.exe` and the `anvil/`
-folder).
+Build Tools with **Desktop development with C++** and its **C++ CMake tools for Windows**
+(CMake 3.25 or newer), Git, and EU4 1.37.5 with Anvil installed (`version.dll` next to
+`eu4.exe` and the `anvil/` folder).
+
+Run the commands below in **Developer PowerShell for VS 2022** from the Start menu: Visual
+Studio's CMake is on the `PATH` there, not in a plain PowerShell.
 
 1. **Create your repository.** On GitHub, **Use this template → Create a new repository**,
    then clone it.
@@ -147,6 +150,8 @@ configure) and rerun the `-check` target with `EU4_EXE` set.
   [paradox-workshop-publish](https://github.com/happy-dwarf-team/paradox-workshop-publish):
   the job summary shows what a release would publish to the Steam Workshop, and the job
   fails when the mod would change the game's checksum. It needs no secrets.
+- warns, as an annotation, about what you have not renamed yet from step 2 of
+  [the first plugin](#your-first-plugin-in-15-minutes). It does not fail the build.
 
 `pr-title.yml` checks that pull request titles follow
 [Conventional Commits](https://www.conventionalcommits.org/) (see

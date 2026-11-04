@@ -30,6 +30,27 @@ jobs:
       - name: Build
         run: cmake --build build --config Release
 
+      # A repository made from the template: what step 2 of the README renames and
+      # is still the template's. A reminder, so it does not fail the build.
+      - name: Names left from the template
+        if: github.repository != 'happy-dwarf-team/anvil-plugin-template'
+        shell: pwsh
+        run: |
+          $left = @(
+              @('plugin.toml', 'id = "my-plugin"', 'the plugin id'),
+              @('plugin.toml', 'Your Name', 'authors'),
+              @('plugin.toml', 'happy-dwarf-team/anvil-plugin-template', 'issues and repository'),
+              @('CMakeLists.txt', 'project(my_plugin', 'the project name'),
+              @('workshop/descriptor.mod', 'name="My plugin', 'the name of the mod'),
+              @('workshop/description.md', 'OWNER/REPO', 'the repository links'),
+              @('workshop/description.md', 'PLUGIN_ID', 'the link to the plugin page')
+          )
+          foreach ($item in $left) {
+              if ((Get-Content $item[0] -Raw).Contains($item[1])) {
+                  Write-Output "::warning file=$($item[0])::Still the template's: $($item[2]). See step 2 of the README."
+              }
+          }
+
       # CI has no eu4.exe, so `anvil check` checks what it can without the game:
       # the schemas of plugin.toml, symbols.toml and settings.toml, and that
       # symbols.lock matches symbols.toml with result = "ok" (the lock check).
