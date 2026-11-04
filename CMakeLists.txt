@@ -12,11 +12,11 @@ FetchContent_Declare(anvil_sdk
 FetchContent_MakeAvailable(anvil_sdk)
 
 # Reads plugin.toml, runs `anvil gen` on symbols.toml and settings.toml, builds
-# the DLL and lays out build/plugin/<id>/. Adds my_plugin-check and, with
-# -DEU4_DIR=<game folder>, my_plugin-deploy.
-anvil_add_plugin(my_plugin SOURCES src/plugin.cpp)
+# the DLL and lays out build/plugin/<id>/. Adds <project>-check and, with
+# -DEU4_DIR=<game folder>, <project>-deploy.
+anvil_add_plugin(${PROJECT_NAME} SOURCES src/plugin.cpp)
 
 # The licence asks to go with every copy: the release zip and the Workshop mod are
 # this folder.
-add_custom_command(TARGET my_plugin POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE" "$<TARGET_FILE_DIR:my_plugin>/LICENSE")
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE" "$<TARGET_FILE_DIR:${PROJECT_NAME}>/LICENSE")
