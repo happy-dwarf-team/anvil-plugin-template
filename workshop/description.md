@@ -9,20 +9,15 @@ What the plugin gives a player, in two or three sentences of a player's words: w
 
 ![](https://i.imgur.com/Uf8Z21n.png)
 
-## Before you subscribe
-- **[Anvil](https://anvil.happydwarf.dev/) 1.7 or newer** must be installed in the game folder. Get it from [anvil.happydwarf.dev](https://anvil.happydwarf.dev/) and press Download. The Workshop can't install it for you: a dwarf has to carry it in by hand, once.
-- **EU4 1.37.5** (Steam, Windows). On any other version the plugin stays out of the way and the game starts as usual.
-- **Playing on GOG?** The GOG build 1.37.5.2 works too, but GOG has no Workshop: see the FAQ below. (Drop this line and the GOG question if your plugin declares Steam only.)
+## Install
+The plugin runs on EU4 1.37.5 (Steam, Windows; the GOG build 1.37.5.2 too, see the FAQ). On any other version it stays out of the way and the game starts as usual. (Drop the GOG part and the GOG question if your plugin declares Steam only. Anything to remove first goes here too.)
 
-![](https://i.imgur.com/Uf8Z21n.png)
+1. **Install [Anvil](https://anvil.happydwarf.dev/) 1.7 or newer.** Download it, run it and click **Install Anvil**. If Windows warns, choose **More info**, then **Run anyway**. You do this once; the Workshop can't do it for you.
+2. **Subscribe** and enable the plugin in your playset.
+3. **Start the game.** Anvil says a plugin is waiting: press **Ctrl+Shift+F12**, open **Mods** and approve it.
+4. **Restart the game.**
 
-## Getting it running
-1. Subscribe and enable the mod in your playset.
-2. Start the game. Anvil will tell you a new plugin is waiting.
-3. Press **Ctrl+Shift+F12**, open **Mods** and approve it. You can also approve it before playing, in Anvil Manager.
-4. Restart.
-
-Anvil asks again after every update. Until you approve, the version you trusted before keeps working.
+Anvil asks again after an update; the version you approved keeps working until then.
 
 ![](https://i.imgur.com/Uf8Z21n.png)
 
@@ -35,7 +30,7 @@ Anvil asks again after every update. Until you approve, the version you trusted 
 
 ## More from Happy Dwarf Team
 - **[Anvil](https://anvil.happydwarf.dev/)**: one plain sentence about what Anvil gives a player.
-- **[Another plugin or mod](https://steamcommunity.com/sharedfiles/filedetails/?id=WORKSHOP_ID)**: what it gives this page's player or tester. Keep only what helps them; 3–5 entries in all.
+- **[Another plugin or mod](https://steamcommunity.com/sharedfiles/filedetails/?id=WORKSHOP_ID)**: what it gives this page's player or tester. Keep only what helps them; 3–6 entries in all.
 - **[Etch](https://etch.happydwarf.dev/)**: for interface modders, see your `.gui` window as the game draws it, right in VS Code.
 - Everything we make: [happydwarf.dev](https://happydwarf.dev/)
 
