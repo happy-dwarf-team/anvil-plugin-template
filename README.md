@@ -97,7 +97,9 @@ Studio's CMake is on the `PATH` there, not in a plain PowerShell.
    verify, the log names the symbol and the byte, and the plugin is skipped while the
    game runs on.
 
-Now replace `src/plugin.cpp` with your own plugin. The
+Now replace `src/plugin.cpp` with your own plugin.
+[Recipes](https://anvil.happydwarf.dev/docs/plugins/recipes/) has a start that needs no game
+addresses at all. The
 [Host API](https://anvil.happydwarf.dev/docs/plugins/api/) lists what the host offers,
 such as the events and the game date of the standard plugin `anvil-game`. `anvil.hpp` (the
 C++ wrapper) and `anvil_plugin.h` (the C API underneath) document every host call.
