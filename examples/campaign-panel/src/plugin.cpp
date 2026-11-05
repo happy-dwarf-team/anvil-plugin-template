@@ -12,7 +12,7 @@
 namespace {
 
 struct CampaignPanel : anvil::Plugin {
-    const AnvilGameWorldService* world = nullptr;
+    const AnvilGameWorldService* world = nullptr;  // NULL on a game build whose port left the world out
     const AnvilPanelService* panels = nullptr;
     AnvilPanel* panel = nullptr;
     std::string last_war = "none";
@@ -20,18 +20,24 @@ struct CampaignPanel : anvil::Plugin {
     // In a handler of an anvil-game event, or in a click: the only moments the
     // world answers.
     void refresh() {
+        if (world == nullptr) {
+            const AnvilPanelRow row{ANVIL_PANEL_TEXT, 0, "Campaign data is not available on this game version.", nullptr, 0};
+            panels->set_rows(panel, &row, 1, sizeof(AnvilPanelRow));
+            return;
+        }
         AnvilGameTag me{};
         AnvilGameCountry country{};
         country.size = sizeof(country);
         if (world->player(&me) != ANVIL_OK || world->country(me.text, &country) != ANVIL_OK) return;
+        // A port may leave the wars out alone: 0 would be a wrong answer.
         uint32_t wars = 0;
-        world->war_ids(nullptr, 0, &wars);
+        const bool has_wars = world->war_ids(nullptr, 0, &wars) == ANVIL_OK;
 
         const std::string treasury = std::format("{:.1f}", country.treasury / 1000.0);
         const std::string income = std::format("{:.1f}", country.monthly_income / 1000.0);
         const std::string stability = std::format("{:+}", country.stability / 1000);
         const std::string provinces = std::to_string(country.province_count);
-        const std::string running = std::to_string(wars);
+        const std::string running = has_wars ? std::to_string(wars) : "not on this game version";
         const AnvilPanelRow rows[] = {
             {ANVIL_PANEL_TEXT, 0, "Country", me.text, 0},
             {ANVIL_PANEL_TEXT, 0, "Treasury", treasury.c_str(), 0},
@@ -49,10 +55,11 @@ struct CampaignPanel : anvil::Plugin {
     void load(anvil::Host& host) override {
         world = host.service<AnvilGameWorldService>(ANVIL_GAME_WORLD_SERVICE, ANVIL_GAME_WORLD_SERVICE_VERSION);
         panels = host.service<AnvilPanelService>(ANVIL_PANEL_SERVICE, ANVIL_PANEL_SERVICE_VERSION);
-        if (world == nullptr || panels == nullptr) {
-            host.warn("needs anvil-game.world and anvil-overlay.panel: Anvil 1.11 or newer");
+        if (panels == nullptr) {
+            host.warn("no anvil-overlay.panel: this plugin needs Anvil 1.11 or newer");
             return;
         }
+        if (world == nullptr) host.warn("no anvil-game.world: the port of anvil-game to this game build left it out");
         if (panels->create("My country", &panel) != ANVIL_OK) return;
         // A click runs after an outer frame, so it may read the world.
         panels->on_click(panel, [](void* self, uint64_t) { static_cast<CampaignPanel*>(self)->refresh(); }, this);
