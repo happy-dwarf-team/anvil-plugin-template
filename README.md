@@ -35,7 +35,7 @@ Studio's CMake is on the `PATH` there, not in a plain PowerShell.
    | --- | --- |
    | `plugin.toml` | `id`, `name`, `entry` (the DLL), `authors`, `description`, `issues`, `repository`, `affects_gameplay` |
    | `CMakeLists.txt` | `project(my_plugin …)`; the target and the `my_plugin-check` and `my_plugin-deploy` targets follow it |
-   | `workshop/descriptor.mod` | `name`, the mod's name in the launcher and on the Workshop: `<Name> - <what it does>`, e.g. `Bellows - Faster Game Start` |
+   | `workshop/descriptor.mod` | `name`, the mod's name in the launcher and on the Workshop: `<Name> - <what it does>`, e.g. `Bellows - Faster Start, Faster Game` |
    | `workshop/description.md` | the Workshop description, from the skeleton, by the [Workshop page convention](https://github.com/happy-dwarf-team/.github/blob/main/docs/workshop-pages.md); replace `OWNER/REPO` and `PLUGIN_ID` |
    | `workshop/thumbnail.png` | the Workshop preview: a placeholder. Generate the real one with [tools/workshop-thumbnail](https://github.com/happy-dwarf-team/.github/tree/main/tools/workshop-thumbnail) from your plugin's icon on the Anvil website (add the icon to anvil-website first) |
    | `LICENSE` | the copyright holder, or another license |
