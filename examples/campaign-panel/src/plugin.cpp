@@ -56,10 +56,15 @@ struct CampaignPanel : anvil::Plugin {
         if (panels->create("My country", &panel) != ANVIL_OK) return;
         // A click runs after an outer frame, so it may read the world.
         panels->on_click(panel, [](void* self, uint64_t) { static_cast<CampaignPanel*>(self)->refresh(); }, this);
-        panels->show(panel, 1);
 
+        // The window belongs to a campaign: in the main menu it would stand empty.
         host.subscribe(ANVIL_GAME_EVENT_SESSION, [this](std::string_view, const void* payload) {
-            if (static_cast<const AnvilGameSession*>(payload)->change == ANVIL_GAME_SESSION_STARTED) refresh();
+            const bool started = static_cast<const AnvilGameSession*>(payload)->change == ANVIL_GAME_SESSION_STARTED;
+            if (started) {
+                last_war = "none";
+                refresh();
+            }
+            panels->show(panel, started ? 1 : 0);
         });
         host.subscribe(ANVIL_GAME_EVENT_MONTH, [this](std::string_view, const void*) { refresh(); });
         host.subscribe(ANVIL_GAME_EVENT_WAR, [this](std::string_view, const void* payload) {
