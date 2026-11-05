@@ -10,6 +10,11 @@ it can also publish to the Steam Workshop.
 The example plugin hooks a function (the game-speed object), hooks the middle of another
 one (the return to the main menu) and has one setting.
 
+A plugin with no game addresses, so nothing to port when the game updates, is in
+[`examples/campaign-panel`](examples/campaign-panel): it reads the player's country and the wars
+and shows them in a window, and needs Anvil 1.11. The
+[recipe](https://anvil.happydwarf.dev/docs/plugins/recipes/) walks through it.
+
 The plugin uses plugin API 2 and needs [Anvil](https://anvil.happydwarf.dev/docs/install/)
 1.7 or newer in the game, the first that reads a `symbols.toml` for several builds. The
 [plugin docs](https://anvil.happydwarf.dev/docs/plugins/overview/) cover the manifest, the

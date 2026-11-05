@@ -1,0 +1,21 @@
+# A plugin with no game addresses: no symbols.toml, no settings. Copy this file and
+# src/plugin.cpp over the template's, and the SDK in CMakeLists.txt must be 1.11 or newer.
+id = "campaign-panel"
+name = "Campaign panel"
+version = "0.1.0"
+authors = ["Your Name"]
+description = "The player's country and the latest war in a window."
+api = 2
+anvil = ">=1.11.0"
+entry = "campaign_panel.dll"
+phase = "main"
+# It only reads, and only shows what the player sees of their own country.
+affects_gameplay = false
+
+[[dependencies]]
+id = "anvil-game"
+version = "^1.11.0"
+
+[[dependencies]]
+id = "anvil-overlay"
+version = "^1.11.0"
