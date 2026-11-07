@@ -44,8 +44,8 @@ Studio's CMake is on the `PATH` there, not in a plain PowerShell.
    | `workshop/description.md` | the Workshop description, from the skeleton, by the [Workshop page convention](https://github.com/happy-dwarf-team/.github/blob/main/docs/workshop-pages.md); replace `OWNER/REPO`, `PLUGIN_ID` and `WORKSHOP_ID`. Outside Happy Dwarf Team, also drop what speaks for the team: **More from Happy Dwarf Team** and the question about the dwarf head |
    | `workshop/thumbnail.png` | the Workshop preview: a placeholder. Generate the real one with [tools/workshop-thumbnail](https://github.com/happy-dwarf-team/.github/tree/main/tools/workshop-thumbnail) from your plugin's icon on the Anvil website (add the icon to anvil-website first) |
    | `LICENSE` | the copyright holder, or another license |
-| `SECURITY.md` | replace it: as it stands, it sends reports to this template |
-| `AGENTS.md`, `CLAUDE.md` | the rules for coding agents, written for this template: rewrite or delete them |
+   | `SECURITY.md` | replace it: as it stands, it sends reports to this template |
+   | `AGENTS.md`, `CLAUDE.md` | the rules for coding agents, written for this template: rewrite or delete them |
    | `.github/ISSUE_TEMPLATE/` | nothing needed: the bug form asks your players for `anvil.log`, the game build, the versions and a crash report; add a hint for narrowing down that fits your plugin, as Bellows asks for the module set to `off` |
 
 3. **Declare your symbols.** Every game address the plugin touches is a
