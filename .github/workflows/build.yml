@@ -43,7 +43,11 @@ jobs:
               @('CMakeLists.txt', 'project(my_plugin', 'the project name'),
               @('workshop/descriptor.mod', 'name="My plugin', 'the name of the mod'),
               @('workshop/description.md', 'OWNER/REPO', 'the repository links'),
-              @('workshop/description.md', 'PLUGIN_ID', 'the link to the plugin page')
+              @('workshop/description.md', 'PLUGIN_ID', 'the link to the plugin page'),
+              @('workshop/description.md', 'WORKSHOP_ID', 'the link to another Workshop item'),
+              @('workshop/description.md', 'One sentence that sells', 'the text of the skeleton'),
+              @('LICENSE', 'Happy Dwarf Team', 'the copyright holder'),
+              @('SECURITY.md', 'happy-dwarf-team/anvil-plugin-template', 'the address for security reports')
           )
           foreach ($item in $left) {
               if ((Get-Content $item[0] -Raw).Contains($item[1])) {

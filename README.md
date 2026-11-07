@@ -41,9 +41,11 @@ Studio's CMake is on the `PATH` there, not in a plain PowerShell.
    | `plugin.toml` | `id`, `name`, `entry` (the DLL), `authors`, `description`, `issues`, `repository`, `affects_gameplay` |
    | `CMakeLists.txt` | `project(my_plugin …)`; the target and the `my_plugin-check` and `my_plugin-deploy` targets follow it |
    | `workshop/descriptor.mod` | `name`, the mod's name in the launcher and on the Workshop: `<Name> - <what it does>`, e.g. `Bellows - Faster Start, Faster Game` |
-   | `workshop/description.md` | the Workshop description, from the skeleton, by the [Workshop page convention](https://github.com/happy-dwarf-team/.github/blob/main/docs/workshop-pages.md); replace `OWNER/REPO` and `PLUGIN_ID` |
+   | `workshop/description.md` | the Workshop description, from the skeleton, by the [Workshop page convention](https://github.com/happy-dwarf-team/.github/blob/main/docs/workshop-pages.md); replace `OWNER/REPO`, `PLUGIN_ID` and `WORKSHOP_ID`. Outside Happy Dwarf Team, also drop what speaks for the team: **More from Happy Dwarf Team** and the question about the dwarf head |
    | `workshop/thumbnail.png` | the Workshop preview: a placeholder. Generate the real one with [tools/workshop-thumbnail](https://github.com/happy-dwarf-team/.github/tree/main/tools/workshop-thumbnail) from your plugin's icon on the Anvil website (add the icon to anvil-website first) |
    | `LICENSE` | the copyright holder, or another license |
+| `SECURITY.md` | replace it: as it stands, it sends reports to this template |
+| `AGENTS.md`, `CLAUDE.md` | the rules for coding agents, written for this template: rewrite or delete them |
    | `.github/ISSUE_TEMPLATE/` | nothing needed: the bug form asks your players for `anvil.log`, the game build, the versions and a crash report; add a hint for narrowing down that fits your plugin, as Bellows asks for the module set to `off` |
 
 3. **Declare your symbols.** Every game address the plugin touches is a
@@ -65,7 +67,7 @@ Studio's CMake is on the `PATH` there, not in a plain PowerShell.
    ```
 
    The first configure downloads the SDK archive of the Anvil release. The plugin lands in `build/plugin/my-plugin/`:
-   `plugin.toml`, `symbols.toml`, `settings.toml` and `my_plugin.dll`.
+   `plugin.toml`, `symbols.toml`, `settings.toml`, `LICENSE` and `my_plugin.dll`.
 
 5. **Check it against the game.**
 
@@ -163,8 +165,9 @@ configure) and rerun the `-check` target with `EU4_EXE` set.
 `pr-title.yml` checks that pull request titles follow
 [Conventional Commits](https://www.conventionalcommits.org/) (see
 [CONTRIBUTING.md](CONTRIBUTING.md)); they become the changelog. `release.yml` runs
-[release-please](https://github.com/googleapis/release-please): it keeps a release pull
-request with the next version (in `version.txt`, `plugin.toml` and
+[release-please](https://github.com/googleapis/release-please): once the repository settings
+below are on and `main` has a commit of a type that releases (see
+[CONTRIBUTING.md](CONTRIBUTING.md)), it keeps a release pull request with the next version (in `version.txt`, `plugin.toml` and
 `workshop/descriptor.mod`) and `CHANGELOG.md`. Merging it tags `vX.Y.Z` and creates a
 **draft** GitHub release with these assets; publish the draft on GitHub to make the
 release public:
@@ -174,7 +177,7 @@ release public:
 | `<id>-<version>.zip` | players: unpack into `<EU4>/anvil/plugins/` |
 | `<id>-windows-x64.zip` | the same zip under a fixed name, for the [plugin catalog](https://anvil.happydwarf.dev/docs/plugins/catalog/) and download links |
 | `<id>-<version>-workshop.zip` | you: unpack into `Documents/Paradox Interactive/Europa Universalis IV/mod/` and upload the mod with the Paradox launcher |
-| `SHA256SUMS.txt` | the hashes; the zips also get a build attestation |
+| `SHA256SUMS.txt` | the hashes; in a public repository the zips also get a build attestation |
 
 The Workshop mod holds only `descriptor.mod` and `anvil/<id>/` (and the preview image
 when [published from CI](#publish-to-the-steam-workshop)), which keeps the game's
@@ -254,10 +257,10 @@ Then, for each release, merge the release pull request, wait until `release.yml`
 attached the zips to the draft release, edit its notes if you like and **publish the
 draft**. `workshop-publish.yml` downloads the release's `<id>-<version>.zip`, checks its
 build attestation (`gh attestation verify`, so exactly the build that `release.yml`
-attested is published), unpacks it into `workshop/anvil/<id>/` and publishes the mod, with the release notes as the Workshop change note. The Workshop
-description is left as you write it on Steam, unless you set `description` in
-`workshop.toml`; then every publish replaces it. When the session expires, the job fails
-with exit code 3: run `pdx-ws session export` again.
+attested is published; in a private repository, only its line in `SHA256SUMS.txt`), unpacks it into `workshop/anvil/<id>/` and publishes the mod, with the release notes as the Workshop change note. `workshop.toml` sets
+`description`, so every publish replaces the Workshop description with
+`workshop/description.md`; remove that key to keep the text you write on Steam. When the
+session expires, the job fails with exit code 3: run `pdx-ws session export` again.
 
 ## Files
 
