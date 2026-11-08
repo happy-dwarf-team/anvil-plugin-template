@@ -39,6 +39,8 @@ Anvil asks again after an update; the version you approved keeps working until t
 ### Alternative download
 [GitHub](https://github.com/OWNER/REPO), also for the GOG build. The plugin page: [anvil.happydwarf.dev/plugins/PLUGIN_ID](https://anvil.happydwarf.dev/plugins/PLUGIN_ID/).
 
+[![](https://anvil.happydwarf.dev/workshop/discord-en.png)](https://discord.happydwarf.dev/)
+
 ![](https://i.imgur.com/Uf8Z21n.png)
 
 ## FAQ
@@ -51,6 +53,9 @@ A short answer first, the joke after it.
 
 ### I play on GOG. Can I use it?
 Yes, on the GOG build 1.37.5.2. GOG has no Workshop, so install the plugin from the release zip on [GitHub](https://github.com/OWNER/REPO/releases) (or from the **Catalog** tab in Anvil Manager, once the plugin is listed there).
+
+### Something's wrong. Where do I ask?
+In **#help-and-bugs** on our [Discord server](https://discord.happydwarf.dev/) (pick the plugin's tag), or in a [GitHub issue](https://github.com/OWNER/REPO/issues/new/choose). What we confirm on Discord goes to GitHub too.
 
 ### What is that little dwarf head on the thumbnail?
 If you check the mod's GitHub page, you will notice the repository belongs to Happy Dwarf Team.
