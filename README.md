@@ -63,7 +63,7 @@ Studio's CMake is on the `PATH` there, not in a plain PowerShell.
 
    ```
    cmake -S . -B build -G "Visual Studio 17 2022" -A x64 -DEU4_EXE="C:/Program Files (x86)/Steam/steamapps/common/Europa Universalis IV/eu4.exe" -DEU4_DIR="C:/Program Files (x86)/Steam/steamapps/common/Europa Universalis IV"
-   cmake --build build --config Release
+   cmake --build build --config Release --parallel
    ```
 
    The first configure downloads the SDK archive of the Anvil release. The plugin lands in `build/plugin/my-plugin/`:
@@ -219,7 +219,7 @@ Once per plugin:
    check the plan first:
 
    ```
-   cmake --build build --config Release
+   cmake --build build --config Release --parallel
    New-Item -ItemType Directory workshop/anvil -Force
    Copy-Item build/plugin/my-plugin workshop/anvil -Recurse -Force
    pdx-ws plan
