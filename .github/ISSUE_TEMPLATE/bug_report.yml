@@ -24,7 +24,7 @@ body:
     id: versions
     attributes:
       label: Plugin and Anvil versions
-      description: "From `anvil/anvil.log`: its first line (e.g. `Anvil 1.17.0 (plugin API 2)`) and the plugin's line (e.g. `my-plugin 0.1.0: loaded`)."
+      description: "From `anvil/anvil.log`: its first line (e.g. `Anvil 1.18.0 (plugin API 2)`) and the plugin's line (e.g. `my-plugin 0.1.0: loaded`)."
     validations:
       required: true
   - type: input
