@@ -12,8 +12,8 @@ include(FetchContent)
 # from the SDK archive of an Anvil release. URL_HASH is the archive's line in
 # the release's SHA256SUMS.txt.
 FetchContent_Declare(anvil_sdk
-    URL https://github.com/happy-dwarf-team/anvil/releases/download/v1.17.0/anvil-sdk-windows-x64.zip
-    URL_HASH SHA256=048a0ae34687e4699379e0a3c2c3d551637867c76152e0699c640a434313fccd)
+    URL https://github.com/happy-dwarf-team/anvil/releases/download/v1.18.0/anvil-sdk-windows-x64.zip
+    URL_HASH SHA256=2ab574ba0949cdeb48e5540ebb98316aded930760006e16fe06bf13537dfd41f)
 FetchContent_MakeAvailable(anvil_sdk)
 
 # Reads plugin.toml, runs `anvil gen` on symbols.toml and settings.toml, builds
