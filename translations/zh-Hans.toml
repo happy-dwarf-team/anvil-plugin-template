@@ -1,0 +1,9 @@
+# The plugin's texts in Simplified Chinese: the description in plugin.toml and the
+# settings' texts in settings.toml, each by its English words. Change them
+# together with the English text (see Translations in README.md).
+status = "draft"            # "checked" once a native speaker checked it
+
+[text]
+"Logs the first game-speed object and each return to the main menu." = "记录第一个游戏速度对象以及每次返回主菜单。"
+"Log each return to the menu" = "记录每次返回菜单"
+"Writes a line to anvil.log whenever the game returns to the main menu." = "每当游戏返回主菜单时，在 anvil.log 中写一行。"
