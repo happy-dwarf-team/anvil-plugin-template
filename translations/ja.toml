@@ -1,0 +1,9 @@
+# The plugin's texts in Japanese: the description in plugin.toml and the
+# settings' texts in settings.toml, each by its English words. Change them
+# together with the English text (see Translations in README.md).
+status = "draft"            # "checked" once a native speaker checked it
+
+[text]
+"Logs the first game-speed object and each return to the main menu." = "最初のゲーム速度オブジェクトと、メインメニューへの毎回の復帰を記録します。"
+"Log each return to the menu" = "メニューへの復帰を毎回記録"
+"Writes a line to anvil.log whenever the game returns to the main menu." = "ゲームがメインメニューに戻るたびに anvil.log に 1 行書き込みます。"

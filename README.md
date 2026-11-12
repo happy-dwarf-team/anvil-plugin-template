@@ -39,6 +39,7 @@ Studio's CMake is on the `PATH` there, not in a plain PowerShell.
    | File | What to change |
    | --- | --- |
    | `plugin.toml` | `id`, `name`, `entry` (the DLL), `authors`, `description`, `issues`, `repository`, `affects_gameplay` |
+   | `translations/*.toml` | the description and the setting texts in eight languages: change them with the English ones (see [Translations](#translations)) |
    | `CMakeLists.txt` | `project(my_plugin …)`; the target and the `my_plugin-check` and `my_plugin-deploy` targets follow it |
    | `workshop/descriptor.mod` | `name`, the mod's name in the launcher and on the Workshop: `<Name> - <what it does>`, e.g. `Bellows - Faster Start, Faster Game` |
    | `workshop/description.md` | the Workshop description, from the skeleton, by the [Workshop page convention](https://github.com/happy-dwarf-team/.github/blob/main/docs/workshop-pages.md); replace `OWNER/REPO`, `PLUGIN_ID` and `WORKSHOP_ID`. Outside Happy Dwarf Team, also drop what speaks for the team: **More from Happy Dwarf Team** and the question about the dwarf head |
@@ -139,6 +140,29 @@ has every rule of the format.
 `settings.gen.hpp`, so `cfg::log_menu_returns.get()` reads the current value. Anvil keeps
 the player's values in `<EU4>/anvil/data/<id>/settings.toml`. Remove `settings` from
 `plugin.toml` and the include from `src/plugin.cpp` when the plugin has none.
+
+## Translations
+
+The overlay and Anvil Manager show the plugin's description and setting texts in the
+player's language when `translations/<code>.toml` has them: one file per language, `fr`,
+`de`, `es`, `zh-Hans`, `zh-Hant`, `ja`, `ko` and `pl`, each a table from the English
+words in `plugin.toml` and `settings.toml` to that language's words. A text without a
+translation is shown in English; the plugin's name always is. Anvil 1.20 or newer reads
+them; an older Anvil ignores the folder, so they need no newer `anvil` in `plugin.toml`.
+
+```toml
+status = "draft"            # "checked" once a native speaker checked it
+[text]
+"Log each return to the menu" = "Noter chaque retour au menu"
+```
+
+When you change an English text, change its key and translation in all eight files:
+the old entry no longer matches, and `anvil check` reports it. CI runs
+`anvil check --complete-translations`, which also fails on a text that is missing in a
+language; drop that option in `.github/workflows/build.yml` if your plugin ships fewer
+languages (a missing translation is then a warning), or delete `translations/` to show
+English everywhere. [Anvil's design §5.4](https://github.com/happy-dwarf-team/anvil/blob/main/docs/design.md)
+has the rules.
 
 ## Updating the SDK
 
@@ -270,6 +294,7 @@ session expires, the job fails with exit code 3: run `pdx-ws session export` aga
 | `symbols.toml` | the game addresses the plugin uses, verified before the DLL loads |
 | `symbols.lock` | the result of `anvil check --exe`; CI checks it is current |
 | `settings.toml` | the player's settings |
+| `translations/<code>.toml` | the description and the setting texts in eight languages |
 | `src/plugin.cpp` | the plugin |
 | `CMakeLists.txt` | fetches the Anvil SDK and calls `anvil_add_plugin` |
 | `workshop/descriptor.mod` | the mod descriptor: its `version` is kept by release-please, and `pdx-ws init` adds `remote_file_id` |

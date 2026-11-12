@@ -1,0 +1,9 @@
+# The plugin's texts in German: the description in plugin.toml and the
+# settings' texts in settings.toml, each by its English words. Change them
+# together with the English text (see Translations in README.md).
+status = "draft"            # "checked" once a native speaker checked it
+
+[text]
+"Logs the first game-speed object and each return to the main menu." = "Protokolliert das erste Spielgeschwindigkeits-Objekt und jede Rückkehr ins Hauptmenü."
+"Log each return to the menu" = "Jede Rückkehr ins Menü protokollieren"
+"Writes a line to anvil.log whenever the game returns to the main menu." = "Schreibt eine Zeile in anvil.log, wann immer das Spiel ins Hauptmenü zurückkehrt."

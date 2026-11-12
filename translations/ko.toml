@@ -1,0 +1,9 @@
+# The plugin's texts in Korean: the description in plugin.toml and the
+# settings' texts in settings.toml, each by its English words. Change them
+# together with the English text (see Translations in README.md).
+status = "draft"            # "checked" once a native speaker checked it
+
+[text]
+"Logs the first game-speed object and each return to the main menu." = "첫 게임 속도 객체와 메인 메뉴로 돌아갈 때마다 기록합니다."
+"Log each return to the menu" = "메뉴로 돌아갈 때마다 기록"
+"Writes a line to anvil.log whenever the game returns to the main menu." = "게임이 메인 메뉴로 돌아갈 때마다 anvil.log에 한 줄을 씁니다."
