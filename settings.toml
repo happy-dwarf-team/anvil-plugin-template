@@ -7,3 +7,13 @@ default = true
 label = "Log each return to the menu"
 description = "Writes a line to anvil.log whenever the game returns to the main menu."
 restart = false               # applies at once: the plugin reads it on every return
+# Anvil 1.23 also reads, each optional (set anvil = ">=1.23.0" in plugin.toml first):
+# advanced = true             # folded under "Advanced" in the overlay and the Manager
+# module = "<module id>"      # the setting of a module of plugin.toml, shown under it
+# affects_gameplay = false    # in a plugin that changes the game: this one does not, so it
+#                             # stays out of the multiplayer code and is not locked there
+
+# A setting you remove can turn its module off once, for the players who had it off:
+# [retired.old_mode]
+# module = "<module id>"
+# off = ["off"]               # these saved values add the module to disabled_modules
