@@ -13,7 +13,10 @@ restart = false               # applies at once: the plugin reads it on every re
 # affects_gameplay = false    # in a plugin that changes the game: this one does not, so it
 #                             # stays out of the multiplayer code and is not locked there
 
-# A setting you remove can turn its module off once, for the players who had it off:
+# A setting you remove can set its module's switch once, for the players who had saved it:
 # [retired.old_mode]
 # module = "<module id>"
-# off = ["off"]               # these saved values add the module to disabled_modules
+# off = ["off"]               # these saved values turn the module off
+# on = ["on"]                 # these turn it on (also a module with default = false)
+# ironman = [true]            # these allow it in ironman (the module offers the opt-in)
+# multiplayer = [true]        # these allow it in multiplayer (likewise)

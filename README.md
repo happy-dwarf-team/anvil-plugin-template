@@ -145,7 +145,8 @@ From Anvil 1.23 a setting can belong to a module (`module`), be folded under "Ad
 (`advanced`) and, in a plugin that changes the game, say it does not (`affects_gameplay =
 false`): the other settings of such a plugin count in the multiplayer code and are locked
 in a multiplayer game. A setting you replace with a module retires with `[retired.<name>]`,
-which turns that module off once for the players who had it off. The commented lines in
+which sets that module's switch once for the players who had saved a value: its `off` and
+`on` lists turn the module off or on, `ironman` and `multiplayer` allow it there. The commented lines in
 `settings.toml` show the keys; they need `anvil = ">=1.23.0"` and an SDK of 1.23 or newer.
 
 ## Translations
