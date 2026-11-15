@@ -10,8 +10,9 @@ restart = false               # applies at once: the plugin reads it on every re
 # Anvil 1.23 also reads, each optional (set anvil = ">=1.23.0" in plugin.toml first):
 # advanced = true             # folded under "Advanced" in the overlay and the Manager
 # module = "<module id>"      # the setting of a module of plugin.toml, shown under it
-# affects_gameplay = false    # in a plugin that changes the game: this one does not, so it
-#                             # stays out of the multiplayer code and is not locked there
+# affects_gameplay = false    # where its module (or the plugin) changes the game: this one
+#                             # does not, so it stays out of the multiplayer code and is not
+#                             # locked there; a key setting is out unless it says true
 
 # A setting you remove can set its module's switch once, for the players who had saved it:
 # [retired.old_mode]

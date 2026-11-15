@@ -142,9 +142,10 @@ the player's values in `<EU4>/anvil/data/<id>/settings.toml`. Remove `settings` 
 `plugin.toml` and the include from `src/plugin.cpp` when the plugin has none.
 
 From Anvil 1.23 a setting can belong to a module (`module`), be folded under "Advanced"
-(`advanced`) and, in a plugin that changes the game, say it does not (`affects_gameplay =
-false`): the other settings of such a plugin count in the multiplayer code and are locked
-in a multiplayer game. A setting you replace with a module retires with `[retired.<name>]`,
+(`advanced`) and say it does not change the game (`affects_gameplay = false`). A setting
+counts in the multiplayer code, and is locked in a multiplayer game, when its module (or,
+without `module`, the plugin) changes the game and the setting does not say `false`; a
+`key` setting counts only with `affects_gameplay = true`. A setting you replace with a module retires with `[retired.<name>]`,
 which sets that module's switch once for the players who had saved a value: its `off` and
 `on` lists turn the module off or on, `ironman` and `multiplayer` allow it there. The commented lines in
 `settings.toml` show the keys; they need `anvil = ">=1.23.0"` and an SDK of 1.23 or newer.
