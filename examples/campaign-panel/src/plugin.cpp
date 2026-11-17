@@ -61,8 +61,15 @@ struct CampaignPanel : anvil::Plugin {
         }
         if (world == nullptr) host.warn("no anvil-game.world: the port of anvil-game to this game build left it out");
         if (panels->create("My country", &panel) != ANVIL_OK) return;
-        // A click runs after an outer frame, so it may read the world.
-        panels->on_click(panel, [](void* self, uint64_t) { static_cast<CampaignPanel*>(self)->refresh(); }, this);
+        // A click runs after an outer frame, so it may read the world. The overlay
+        // calls it through a C pointer, unlike host.subscribe's handlers, so catch
+        // here: an exception (refresh() allocates) must not leave it.
+        panels->on_click(panel, [](void* self, uint64_t) noexcept {
+            try {
+                static_cast<CampaignPanel*>(self)->refresh();
+            } catch (...) {
+            }
+        }, this);
 
         // The window belongs to a campaign: in the main menu it would stand empty.
         host.subscribe(ANVIL_GAME_EVENT_SESSION, [this](std::string_view, const void* payload) {
