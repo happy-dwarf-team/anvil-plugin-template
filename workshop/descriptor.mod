@@ -3,4 +3,4 @@ tags={
 	"Utilities"
 }
 name="My plugin - What it does"
-supported_version="1.37.*"
+supported_version="v1.37.*.*"
