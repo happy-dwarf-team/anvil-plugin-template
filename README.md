@@ -202,8 +202,9 @@ configure) and rerun the `-check` target with `EU4_EXE` set.
 below are on and `main` has a commit of a type that releases (see
 [CONTRIBUTING.md](CONTRIBUTING.md)), it keeps a release pull request with the next version (in `version.txt`, `plugin.toml` and
 `workshop/descriptor.mod`) and `CHANGELOG.md`. Merging it tags `vX.Y.Z` and creates a
-**draft** GitHub release with these assets; publish the draft on GitHub to make the
-release public:
+**draft** GitHub release with these assets. With the `RELEASE_PLEASE_TOKEN` secret (below),
+`release.yml` publishes it once the assets are attached; without it, publish the draft on
+GitHub to make the release public:
 
 | Asset | For |
 | --- | --- |
@@ -228,7 +229,9 @@ Repository settings that make this work (Settings on GitHub):
 - **Actions → General → Workflow permissions:** allow GitHub Actions to create and approve
   pull requests (release-please opens its pull request with the workflow token).
 - Optional secret `RELEASE_PLEASE_TOKEN` (a fine-grained token with contents and pull
-  requests write): with it, CI also runs on the release pull request.
+  requests write): with it, CI also runs on the release pull request, and `release.yml`
+  publishes each release itself, which starts `workshop-publish.yml` (a release published
+  with the workflow token starts no workflow).
 
 ## Publish to the Steam Workshop
 
@@ -286,9 +289,11 @@ Once per plugin:
 
 4. **Turn publishing on:** `gh variable set WORKSHOP_PUBLISH --body true`.
 
-Then, for each release, merge the release pull request, wait until `release.yml` has
-attached the zips to the draft release, edit its notes if you like and **publish the
-draft**. `workshop-publish.yml` downloads the release's `<id>-<version>.zip`, checks its
+Then, for each release, edit the release pull request's notes if you like and merge it.
+`release.yml` attaches the zips to the draft release and, with `RELEASE_PLEASE_TOKEN`,
+publishes it; without the secret, wait until the zips are attached and **publish the
+draft** yourself. The publish waits for your approval in the `steam-workshop` environment.
+`workshop-publish.yml` downloads the release's `<id>-<version>.zip`, checks its
 build attestation (`gh attestation verify`, so exactly the build that `release.yml`
 attested is published; in a private repository, only its line in `SHA256SUMS.txt`), unpacks it into `workshop/anvil/<id>/` and publishes the mod, with the release notes as the Workshop change note. `workshop.toml` sets
 `description`, so every publish replaces the Workshop description with
