@@ -1,8 +1,9 @@
 name: workshop-publish
 
 # Publishes the plugin as a Steam Workshop mod when a release is published:
-# release.yml creates a draft release with the zips, and publishing that draft
-# on GitHub starts this workflow. The mod gets exactly the plugin zip of that
+# release.yml creates a draft release with the zips and publishes it (with a
+# RELEASE_PLEASE_TOKEN secret; otherwise you publish the draft on GitHub), and
+# publishing it starts this workflow. The mod gets exactly the plugin zip of that
 # release, checked against its build attestation, so the Workshop and GitHub
 # serve the same build. The release notes become the Workshop change note, and
 # workshop/description.md the item's description.
