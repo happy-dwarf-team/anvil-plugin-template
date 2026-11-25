@@ -50,11 +50,17 @@ Studio's CMake is on the `PATH` there, not in a plain PowerShell.
    | `.github/ISSUE_TEMPLATE/` | nothing needed: the bug form asks your players for `anvil.log`, the game build, the versions and a crash report; add a hint for narrowing down that fits your plugin, as Bellows asks for the module set to `off` |
 
 3. **Declare your symbols.** Every game address the plugin touches is a
-   `[symbol.<name>]` in `symbols.toml`: its `rva`, the `bytes` expected there, the
-   `memory` kind and, for a function, its C `signature`. The two symbols in the template
-   are real for the Steam 1.37.5 and the GOG 1.37.5.2 `eu4.exe`: `builds` lists both,
-   and where a symbol lies or what bytes it has differs, a `build."<id>"` table says
-   it per build (see [Steam and GOG](#steam-and-gog)). `anvil gen` turns them into
+   `[symbol.<name>]` in `symbols.toml`: its `rva`, the `sha256` and `size` of the bytes
+   expected there, the `memory` kind and, for a function, its C `signature`. The two
+   symbols in the template are real for the Steam 1.37.5 and the GOG 1.37.5.2 `eu4.exe`:
+   `builds` lists both, and where a symbol lies or what bytes it has differs, a
+   `build."<id>"` table says it per build (see [Steam and GOG](#steam-and-gog)).
+   A digest keeps the game's code out of your repository: while you work, write the bytes
+   you expect as `bytes = "…"`, and before you commit, run Anvil's
+   [`tools/symbols-to-digest.py`](https://github.com/happy-dwarf-team/anvil/blob/main/tools/symbols-to-digest.py)
+   on `symbols.toml`, which replaces each `bytes` with `sha256`, `size` and `any`. In
+   `note` and comments, describe the game's code by its address and what it does, not by
+   names from a debugger. `anvil gen` turns them into
    `symbols.gen.hpp` at build time (`sym::speed_object`), so a hook whose function does
    not match the signature does not compile. The
    [manifest reference](https://anvil.happydwarf.dev/docs/plugins/manifest/#symbolstoml)
@@ -102,7 +108,7 @@ Studio's CMake is on the `PATH` there, not in a plain PowerShell.
    and open `<EU4>/anvil/anvil.log`. It lists your plugin with its status and its
    changes, then the plugin's own lines: `loaded on Anvil …`, the first game-speed
    object, and a line each time you return to the main menu. When a symbol does not
-   verify, the log names the symbol and the byte, and the plugin is skipped while the
+   verify, the log names the symbol, and the plugin is skipped while the
    game runs on.
 
 Now replace `src/plugin.cpp` with your own plugin.
@@ -118,17 +124,17 @@ Anvil knows two builds of EU4 1.37.5: Steam (`eu4-1.37.5-steam-win64`) and GOG 1
 (`eu4-1.37.5.2-gog-win64`). A plugin runs only on the builds its `symbols.toml` lists, so
 the template lists both, and a new symbol needs its place in both:
 
-- **The same bytes at another address** (`idle_exit`): `bytes` once, an `rva` per build in
-  `build."<id>" = { rva = … }`.
-- **Other bytes** (`speed_object` reads a field that is 0x10 lower on GOG): `rva` and
-  `bytes` in a `[symbol.<name>.build."<id>"]` table each. A `values` entry whose number
-  differs by build has no `anvil gen` constant; read it with `Host::value` when the plugin
-  loads.
-- **Finding it on GOG:** GOG ships `eu4.pdb` next to `eu4.exe`, so a debugger or a
-  disassembler names the function; most functions kept their bytes apart from addresses
-  and some offsets. Run the `-check` target with each build's `eu4.exe`.
-- **One build only:** write `build = "<id>"` and give `rva` and `bytes` directly. On the
-  other build Anvil skips the plugin and the game starts without it.
+- **The same bytes at another address** (`idle_exit`): `sha256` and `size` once, an `rva`
+  per build in `build."<id>" = { rva = … }`.
+- **Other bytes** (`speed_object` reads a field that is 0x10 lower on GOG): `rva`,
+  `sha256` and `size` in a `[symbol.<name>.build."<id>"]` table each. A `values` entry
+  whose number differs by build has no `is` and no `anvil gen` constant; read it with
+  `Host::value` when the plugin loads.
+- **Finding it on GOG:** most functions kept their bytes apart from addresses and some
+  offsets, so a disassembler finds them by their code; keep the bytes you compare on your
+  own machine. Run the `-check` target with each build's `eu4.exe`.
+- **One build only:** write `build = "<id>"` and give `rva`, `sha256` and `size` directly.
+  On the other build Anvil skips the plugin and the game starts without it.
 
 The Steam Workshop serves Steam players only; GOG players install the release zip.
 [Anvil's design §5.2](https://github.com/happy-dwarf-team/anvil/blob/main/docs/design.md)
